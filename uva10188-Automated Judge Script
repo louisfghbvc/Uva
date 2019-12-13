@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+string judge(string &a, string &b){
+    if(a == b)
+        return "Accepted";
+    string na = "", nb = "";
+    for(char c : a){
+        if(isdigit(c))
+            na += c;
+    }
+    for(char c : b){
+        if(isdigit(c))
+            nb += c;
+    }
+    if(na == nb)
+        return "Presentation Error";
+    return "Wrong Answer";
+}
+int main()
+{
+    int n, m, cas = 1;
+    while(cin >> n, n){
+        cin.ignore();
+        string a = "";
+        string b = "";
+        for(int i = 0; i < n; ++i){
+            string tmp;
+            getline(cin, tmp);
+            if(i)
+                a += '\n';
+            a += tmp;
+        }
+        cin >> m;
+        cin.ignore();
+        for(int i = 0; i < m; ++i){
+            string tmp;
+            getline(cin, tmp);
+            if(i)
+                b += '\n';
+            b += tmp;
+        }
+        printf("Run #%d: %s\n", cas++, judge(a, b).c_str());
+    }
+    return 0;
+}
