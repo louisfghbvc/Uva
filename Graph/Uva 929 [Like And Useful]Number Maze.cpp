@@ -1,3 +1,4 @@
+//like dp but not, is shortest path problem
 #include <bits/stdc++.h>
 #define N 1005
 using namespace std;
