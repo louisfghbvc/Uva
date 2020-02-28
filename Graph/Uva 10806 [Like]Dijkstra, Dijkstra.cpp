@@ -1,4 +1,4 @@
-//find 2 shortest path, and sum it
+//find 2 shortest path, and sum it, each edge use only once, very tricky, like flow
 #include <bits/stdc++.h>
 #define N 105
 using namespace std;
