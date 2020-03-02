@@ -19,7 +19,7 @@ bool spfa(){
     q.push(s);
     inq[s] = 1;
     dis[s] = 0;
-
+    
     while(!q.empty()){
         int u = q.front(); q.pop();
         inq[u] = false;
