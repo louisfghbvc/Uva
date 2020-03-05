@@ -1,9 +1,10 @@
-//O(nloglogn), Euler is amazing. delete 2's, 3's, 5's ...
+//O(nloglogn), Use table speed up. Euler is amazing. delete 2's, 3's, 5's ...
 #include <bits/stdc++.h>
 #define N 2000005
 using namespace std;
 
 int phi[N];
+int depth[N];
 
 void phi_init(){
     memset(phi, 0, sizeof phi);
@@ -27,9 +28,16 @@ int dep_phi(int x){
     return cnt;
 }
 
+void dep_table(){
+    for(int i = 1; i < N; ++i){
+        depth[i] = dep_phi(i);
+    }
+}
+
 int main()
 {
     phi_init();
+    dep_table();
     
     int t, m, n;
     cin >> t;
@@ -38,10 +46,11 @@ int main()
         
         int res = 0;
         for(int i = m; i <= n; ++i){
-            res += dep_phi(i);
+            res += depth[i];
         }
         
         cout << res << endl;
     }
     return 0;
 }
+
