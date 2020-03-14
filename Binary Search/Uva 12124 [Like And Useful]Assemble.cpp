@@ -1,3 +1,4 @@
+//tricky, and mp[a] = mp.size(), can't do that, don't know why..
 #include <bits/stdc++.h>
 #define N 1005
 using namespace std;
@@ -30,6 +31,7 @@ int main()
             r = max(r, q);
         }
 
+        int ans = 0;
         while(l <= r){
             int mid = (l + r)/2;
             int sum = 0;
@@ -48,11 +50,10 @@ int main()
                 r = mid - 1;
             }
             else{
-                l = mid + 1;
-
+                l = mid + 1, ans = max(mid, ans);
             }
         }
-        cout << r << endl;
+        cout << ans << endl;
     }
     return 0;
 }
