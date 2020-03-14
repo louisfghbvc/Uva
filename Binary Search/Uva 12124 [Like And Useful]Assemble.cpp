@@ -1,4 +1,4 @@
-//tricky, and mp[a] = mp.size(), can't do that, don't know why..
+//tricky, and mp[a] = mp.size() - 1, remeber it important
 #include <bits/stdc++.h>
 #define N 1005
 using namespace std;
