@@ -32,7 +32,8 @@ int main(){
     while(cin >> l >> u){
     	int p1(0), p2(0), mn(INT_MAX), mx(INT_MIN);
     	int a, b, c, d;
-    	for(int i = l; i <= u; ++i){
+    	for(unsigned int i = l; i <= u; ++i){
+            if(i <= 1) continue;
     		if(isP(i)){
     			if(p1 <= p2) p1 = i;
     			else p2 = i;
