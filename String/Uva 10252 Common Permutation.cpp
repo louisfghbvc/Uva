@@ -1,9 +1,9 @@
-//only lower letter. so can do this.
+//only lower letter. so can do this. careful a line maybe empty. boring judge. 
 #include <bits/stdc++.h>
 using namespace std;
 int main(){
     string a, b;
-    while(cin >> a >> b){
+    while(getline(cin, a) && getline(cin, b)){
     	int ac[27] = {};
     	int bc[27] = {};
     	for(int i = 0; i < a.size(); ++i) ac[a[i]-'a']++;
