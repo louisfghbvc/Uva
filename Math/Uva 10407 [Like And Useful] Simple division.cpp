@@ -1,6 +1,11 @@
-//O(Nlog(num)), very impressive solution. gcd. think about example 14 and 23.
-//14 + 9, dif = 9
-//23    , after they cut 9*x, remain is same, this is ans.
+//O(Nlog(num)), very impressive solution. gcd. think about example 14, 17, 23.
+//14 = d*q1 + r --- (1)
+//17 = d*q2 + r --- (2)
+//23 = d*q3 + r --- (3)
+//(2)-(1), (3)-(2)
+//17 - 14 = d*(q2-q1)
+//23 - 17 = d*(q3-q2)
+//find d. so d is gcd num's difference.
 #include <bits/stdc++.h>
 using namespace std;
 int main(){
