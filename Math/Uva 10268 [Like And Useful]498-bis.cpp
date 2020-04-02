@@ -1,3 +1,4 @@
+//Can't use pow, 浮點數誤差
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long LL;
@@ -22,7 +23,7 @@ int main(){
     	
     	LL ans = 0;
     	for(int i = 0, n = v.size()-1; i < v.size()-1; ++i, n--){
-    		ans += v[i] * n * pow(x, n - 1);
+    		ans += v[i] * n * pow2(x, n - 1);
     	}
     	cout << ans << endl;
     }
