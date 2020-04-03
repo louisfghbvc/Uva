@@ -1,12 +1,14 @@
+//Watch out input is valid.
 #include <bits/stdc++.h>
 using namespace std;
 int arr[105];
 int main(){
-    int n, cas = 1, t;
+    int n, cas = 1;
     while(cin >> n){
     	bool ok = 1;
     	for(int i = 0; i < n; ++i){
     		cin >> arr[i];
+            if(arr[i] < 1 || (i!=0 && arr[i] <= arr[i-1])) ok = 0;
     	}
     	bool vis[20005] = {};
     	for(int i = 0; i < n && ok; ++i){
