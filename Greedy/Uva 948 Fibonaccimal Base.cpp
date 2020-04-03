@@ -12,7 +12,7 @@ void init(){
 	}
 }
 
-LL func(int x){
+void func(int x){
 	bool f = 0;
 	for(int i = N - 1; i >= 2; --i){
 		if(x >= arr[i]){
