@@ -1,5 +1,5 @@
 // Just find a subset. may have many ans. Enum.
-// O(2^t * t). slow ans.
+// O(2^t * t). slow ans. 0.520s
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -31,3 +31,31 @@ int main()
 }
 
 // Solution2 01 bag. Dp, Fast ans.
+// any path are correct. 0s.
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n, t;
+    while(cin >> n >> t){
+        int arr[t], cd[n+1] = {};
+        bool dp[n+1] = {};
+        for(int i = 0; i < t; ++i) cin >> arr[i];
+        dp[0] = 1;
+        for(int i = 0; i < t; ++i){
+            for(int j = n; j >= arr[i]; --j){
+                if(dp[j-arr[i]] == 1 && dp[j] == 0){
+                    dp[j] = 1;
+                    cd[j] = arr[i];
+                }    
+            }
+        }
+        int st = n;
+        while(!dp[st]) st--;
+        for(int k = st; k; k -= cd[k]){
+            printf("%d ", cd[k]);    
+        }
+        printf("sum:%d\n", st);
+    }
+}
