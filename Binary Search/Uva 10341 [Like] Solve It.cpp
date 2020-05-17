@@ -1,5 +1,5 @@
 // math, binary search solve.
-// x = [0, 1], if has root must f(a)*f(b) < 0. the line pass origin.
+// x = [0, 1], if has root must f(0)*f(1) < 0. the line pass origin.
 // first check 0 or 1 is ans or not.
 // use fabs to know if is close 0.
 // eps 1e-7. make value perfect.
