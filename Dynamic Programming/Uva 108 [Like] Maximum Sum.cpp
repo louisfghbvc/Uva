@@ -40,4 +40,37 @@ int main()
 8 0 -2
 **/
 
-// Solution2 2D dp. O(N^3)
+// Solution2 2D dp. O(N^3). divide to 1D sub-array problem.
+// Cool think.
+
+#include <bits/stdc++.h>
+using namespace std;
+int arr[105][105];
+int s[105];
+int main()
+{
+    //freopen("out.txt", "w", stdout);
+    int n;
+    while(cin >> n){
+        for(int i = 0; i < n; ++i){
+            for(int j = 0; j < n; ++j){
+                cin >> arr[i][j];
+            }
+        }
+        int mx = INT_MIN;
+        for(int i = 0; i < n; ++i){
+            memset(s, 0, sizeof s);
+            for(int j = i; j < n; ++j){
+                for(int k = 0; k < n; ++k) s[k] += arr[j][k];
+                int tmp = 0, local_mx = INT_MIN;
+                for(int k = 0; k < n; ++k){
+                    tmp = max(tmp+s[k], s[k]);
+                    local_mx = max(local_mx, tmp);
+                }
+                mx = max(mx, local_mx);
+            }
+        }
+        cout << mx << endl;
+    }
+    return 0;
+}
