@@ -82,4 +82,41 @@ int main()
     return 0;
 }
 
-// Solution3
+// Solution3, value descending. and use disjoint set, put as deadline as possible
+// change parent to prev time just like check remain container. trick and impressive. good problem.
+#include <bits/stdc++.h>
+#define N 10005
+using namespace std;
+struct node{
+    int p, t;
+    bool operator<(const node &n2) const{
+        return p > n2.p;
+    }
+}arr[N];
+
+int nxt[N];
+int findp(int x){
+    return nxt[x] == -1 ? x : nxt[x] = findp(nxt[x]);
+}
+
+int main()
+{
+    int n;
+    while(cin >> n){
+        for(int i =0; i < n; ++i){
+            cin >> arr[i].p >> arr[i].t;
+        }
+        sort(arr, arr+n);
+        int ans = 0;
+        memset(nxt, -1, sizeof nxt);
+        for(int i = 0; i < n; ++i){
+            int t = findp(arr[i].t);
+            if(t){
+                ans += arr[i].p;
+                nxt[t] = t-1;
+            }
+        }
+        cout << ans << endl;
+    }
+    return 0;
+}
