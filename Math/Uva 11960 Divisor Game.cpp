@@ -50,3 +50,40 @@ int main() {
     cin >> t;
     while(t--) solve();
 }
+
+
+// O(NlogN) Super Fast.
+#include <bits/stdc++.h>
+using namespace std;
+
+const int N = 1e6+5;
+int table[N];
+
+void init(){
+
+    for(int i = 1; i <= 1e6; ++i)
+        for(int j = i; j <= 1e6; j += i)
+            table[j]++;
+
+    int mx = 1, mxi = 1;
+    for(int i = 1; i <= 1e6; ++i){
+        if(mx <= table[i]){
+            mx = table[i];
+            mxi = i;
+        }
+        table[i] = mxi;
+    }
+}
+
+void solve(){
+    int n;
+    cin >> n;
+    cout << table[n] << "\n";
+}
+
+int main() {
+    init();
+    int t;
+    cin >> t;
+    while(t--) solve();
+}
