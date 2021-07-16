@@ -8,7 +8,7 @@ bool dfs(vector<int> &cnt, int tot, bool S){
     if(dp[tot][S] != -1) return dp[tot][S];
     if(S){
         bool res = false;
-        for(int i = 1; i <= 9; ++i){
+        for(int i = 0; i <= 9; ++i){
             if(cnt[i] && tot >= i && (tot - i) % 3 == 0){
                 cnt[i]--;
                 res |= dfs(cnt, tot-i, 0);
@@ -19,7 +19,7 @@ bool dfs(vector<int> &cnt, int tot, bool S){
     }
     else{
         bool res = true;
-        for(int i = 1; i <= 9; ++i){
+        for(int i = 0; i <= 9; ++i){
             if(cnt[i] && tot >= i && (tot - i) % 3 == 0){
                 cnt[i]--;
                 res = res & dfs(cnt, tot-i, 1);
