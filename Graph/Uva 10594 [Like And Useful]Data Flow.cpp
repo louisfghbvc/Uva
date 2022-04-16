@@ -1,109 +1,106 @@
-//110ms, Min Cost Max Flow, Ek algorithm
 #include <bits/stdc++.h>
-#define N 105
-#define M 5050
-typedef long long LL;
-LL INF = 1e14;
 using namespace std;
-LL cost[N][N], dis[N], path[N];
-LL f[N][N], c[N][N];
-LL n, m, s, t, data, cap, flow;
-LL ans;
-bool inq[N];
-bool spfa(){
-    memset(inq, 0, sizeof inq);
-    memset(path, -1, sizeof path);
-    for(int i = 1; i <= n; i++)
-        dis[i] = INF;
-    queue<int> q;
-    q.push(s);
-    inq[s] = 1;
-    dis[s] = 0;
-    
-    while(!q.empty()){
-        int u = q.front(); q.pop();
-        inq[u] = false;
 
-        for(int v = 1; v <= n; ++v){
-            if(f[v][u] > 0 && dis[u] + (-cost[v][u]) < dis[v]){
-                dis[v] = dis[u] - cost[v][u];
-                path[v] = u;
-                if(!inq[v]){
-                    inq[v] = true;
-                    q.push(v);
-                }
-            }
-            else if(c[u][v] > f[u][v] && dis[v] > dis[u] + cost[u][v]){
-                dis[v] = dis[u] + cost[u][v];
-                path[v] = u;
-                if(!inq[v]){
-                    inq[v] = true;
-                    q.push(v);
-                }
-            }
-        }
+typedef long long LL;
+
+template<size_t N, typename C=int, typename W=int>
+struct mcmf {
+    struct edge {
+        int v, v_id;
+        C c; // flow
+        W w; // weight
+        edge (int v, int v_id, C c, W w) : v(v), v_id(v_id), c(c), w(w) {}
+    };
+
+    vector<edge> g[N];
+    typename vector<edge>::iterator idx[N];
+    int pre[N]; // parent
+    W d[N], h[N]; // dis, prime-dual alg
+    bool visit[N];
+    int n;
+    mcmf (int n) : n(n) {}
+
+    void add_edge(int x, int y, C c, W w) {
+        g[x].emplace_back(y, g[y].size(), c, w);
+        g[y].emplace_back(x, g[x].size() - 1, 0, -w);
     }
-    if(dis[t] == INF) return false;
 
-    return true;
-}
-
-void MCMF(){
-    ans = 0;
-    flow = 0;
-    while(spfa()){
-        LL a = INF;
-        for(int u = t; u != s; u = path[u]){
-            a = min(a, c[path[u]][u] - f[path[u]][u]);
-        }
-        for(int u = t; u != s; u = path[u]){
-            f[path[u]][u] += a;
-            f[u][path[u]] -= a;
-        }
-
-        ans += dis[n] * a;
-
-        flow += a;
-    }
-}
-
-int main()
-{
-    while(cin >> n >> m){
-        memset(cost, 0, sizeof cost);
-        for(int i = 1; i <= n; ++i)
-            for(int j = 1; j <= n; ++j)
-                cost[i][j] = INF;
-        memset(f, 0, sizeof f);
-        memset(c, 0, sizeof c);
-
-        for(int i = 0; i < m; ++i){
-            int a, b, w;
-            cin >> a >> b >> w;
-            cost[a][b] = w;
-            cost[b][a] = w;
-            c[a][b] = c[b][a] = 1;
-        }
-
-        cin >> data >> cap;
-
-        for(int i = 1; i <= n; ++i){
-            for(int j = 1; j <= n; ++j){
-                if(c[i][j]){
-                    c[i][j] = c[j][i] = cap;
+    bool dijkstra(int s, int t) {
+        priority_queue<pair<W, int>, vector<pair<W, int>>, greater<pair<W, int>>> pq; // weight, u
+        fill(pre, pre+n, -1);
+        fill(d, d+n, numeric_limits<W>::max() / 2);
+        d[s] = 0;
+        pq.push({d[s], s});
+        while (pq.size()) {
+            auto [dd, u] = pq.top(); pq.pop();
+            if (d[u] != dd) continue;
+            for (auto it = g[u].begin(); it != g[u].end(); ++it) {
+                if (it->c && d[it->v] + h[it->v] > d[u] + it->w + h[u]) {
+                    d[it->v] = d[u] + it->w + h[u] - h[it->v]; // note: w + h[u] - h[v] >= 0
+                    pre[it->v] = u;
+                    idx[it->v] = it;
+                    pq.push({d[it->v], it->v});
                 }
             }
         }
-        c[0][1] = c[1][0] = data;
-        s = 0; t = n;
+        return pre[t] >= 0;
+    }
 
-        MCMF();
-
-        if(data == flow){
-            cout << ans << endl;
+    pair<C, W> solve(int s, int t) { 
+        pair<C, W> res;
+        fill(h, h + n, 0);
+        while (dijkstra(s, t)) {
+            for (int i = 0; i < n; ++i) h[i] += pre[i] < 0 ? 0 : d[i];
+            C aug = numeric_limits<C>::max() / 2;
+            for (int i = t; pre[i] != -1; i = pre[i]) {
+                aug = min(aug, idx[i]->c);
+            }
+            W sum = 0; 
+            for (int i = t; pre[i] != -1; i = pre[i]) {
+                idx[i]->c -= aug;
+                g[idx[i]->v][idx[i]->v_id].c += aug;
+                sum += idx[i]->w * aug; 
+            }
+            res.first += aug;
+            res.second += sum;
         }
-        else
+        return res;
+    }
+};
+
+
+void solve() {
+    int n, m;
+    while (cin >> n >> m) {
+        mcmf<105, LL, LL> flow(n+1);
+        vector<array<LL, 3>> edge(m);
+        for (int i = 0; i < m; ++i)
+            for (int j = 0; j < 3; ++j)
+                cin >> edge[i][j];
+
+        LL d, c; // data, capacity
+        cin >> d >> c;
+        for (auto &e: edge) {
+            LL u = e[0], v = e[1], w = e[2]; 
+            flow.add_edge(u, v, c, w);
+            flow.add_edge(v, u, c, w);
+        }
+        flow.add_edge(0, 1, d, 0); // 0 is super-node
+        auto res = flow.solve(0, n);
+        if (res.first == d) {
+            cout << res.second << "\n";
+        }
+        else {
             cout << "Impossible.\n";
+        }
     }
-    return 0;
+}
+
+int main() {
+    cin.tie(0)->sync_with_stdio(false);
+
+    // freopen("in.txt", "r", stdin);
+    // freopen("out.txt", "w", stdout);
+
+    solve();
 }
